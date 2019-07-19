@@ -152,7 +152,7 @@ export function filter(q: string) {
       number,
       total: questions.length,
       ...(questions[number]),
-      hasNext: number < questions.length,
+      hasNext: number < questions.length - 1,
       hasPrev: number > 0,
     };
   } else {

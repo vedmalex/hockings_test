@@ -16,4 +16,8 @@ export type Question = {
 export type Section = {
     name: string;
     questions: Question[];
+    number?:number;
+    total?: number;
+    hasNext?: boolean;
+    hasPrev?: boolean;
 }

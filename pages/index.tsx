@@ -1,16 +1,30 @@
 
 import React, { useState } from 'react';
-import { LevelOfConcious } from '../lib/types';
+import { LevelOfConcious, Section } from '../lib/types';
 import { useFetch } from '../lib/useFetch';
+import { useRouter } from 'next/router';
+
+import Link from 'next/link';
 
 let res = 20;
 let quest = 0;
 const Index = () => {
-  const [result, setResult] = useState(res)
-  const [question, setQuestion] = useState(quest)
+  const router = useRouter();
+  let n = router.query.number;
+  let number: number;
+  if(Array.isArray(n)){
+    number = parseInt(n[0]);
+  } else if(n){
+    number = parseInt(n);
+  } else {
+    number = 1;
+  }
 
-  const [questions, loadingQuestions] = useFetch<any>("/api/questions");
-  const [levelDescription, loadingLevel] = useFetch<LevelOfConcious>(`/api/levels?level=${result || 20}`);
+  const [result, setResult] = useState(res)
+  const [answers, setAnswer] = useState({});
+
+  const [section, loadingSection] = useFetch<Section>(`/api/questions?question=${number-1 || quest}`);
+  const [levelDescription, loadingLevel] = useFetch<LevelOfConcious>(`/api/levels?level=${result || res}`);
   const [level, setLevel] = useState<LevelOfConcious>({} as LevelOfConcious);
   if(!loadingLevel){
     if (level.mark != levelDescription.mark) {
@@ -28,20 +42,32 @@ const Index = () => {
       <li>Процесс: {level.process}</li>
     </ol>
     {
-      loadingQuestions ? ("Loading...") : questions.map((q, index) => (
+      loadingSection ? ("Loading...") : (
         <>
-          <h2>{index + 1}. {q.name}</h2>
+          <h2>{number}. {section.name}</h2>
           {
-            q.questions.map((sq, item) => (
-              <p key={item}>
+            section.questions.map((sq, item) => (
+              <p key={`${number}${item}`}>
                 {item + 1}. {sq.name}
-                <input type="checkbox" onChange={(e) => e.target.checked ? setResult((result * 10 + sq.mark) / 10) : setResult((result * 10 - sq.mark) / 10)} />
+                <input type="checkbox" onChange={(e) => {
+                  e.target.checked ? setResult((result * 10 + sq.mark) / 10) : setResult((result * 10 - sq.mark) / 10);
+                  e.target.checked? setAnswer({
+                    ...answers,
+                    [`${number}${item}`]:true,
+                  }):
+                  setAnswer({
+                    ...answers,
+                    [`${number}${item}`]:false,
+                  })
+                }} checked={answers[`${number}${item}`]}/>
                 ({sq.state})
             </p>
             ))
           }
+          {section.hasPrev ? <Link href={`/?number=${number - 1}`}><a>Prev</a></Link> : <a>Prev</a>} {' '}
+          {section.hasNext ? <Link href={`/?number=${number + 1}`}><a>Next</a></Link> : <a>Prev</a>}
         </>)
-      )}
+      }
   </>)
 }
 
