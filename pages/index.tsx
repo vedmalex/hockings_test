@@ -4,9 +4,11 @@ import { LevelOfConcious } from '../lib/types';
 import { useFetch } from '../lib/useFetch';
 
 let res = 20;
+let quest = 0;
 const Index = () => {
   const [result, setResult] = useState(res)
-  debugger;
+  const [question, setQuestion] = useState(quest)
+
   const [questions, loadingQuestions] = useFetch<any>("/api/questions");
   const [levelDescription, loadingLevel] = useFetch<LevelOfConcious>(`/api/levels?level=${result || 20}`);
   const [level, setLevel] = useState<LevelOfConcious>({} as LevelOfConcious);
