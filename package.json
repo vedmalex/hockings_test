@@ -9,11 +9,16 @@
     "deploy": "yarn export; surge ./out hockings-consciousness-test.surge.sh"
   },
   "dependencies": {
-    "next": "^8.1.0",
-    "prop-types": "^15.7.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "next": "latest",
+    "prop-types": "latest",
+    "react": "latest",
+    "react-dom": "latest"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^12.6.8",
+    "@types/react": "^16.8.23",
+    "typescript": "^3.5.3"
+  }
 }

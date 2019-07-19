@@ -1,8 +1,16 @@
 
 import React, { useState } from 'react';
-import { withAmp } from 'next/amp';
 
-const map = [
+type LevelOfConcious = {
+  whoIsGod:string;
+  lifeIs:string;
+  level:string;
+  mark:number;
+  emotion:string;
+  process:string;
+};
+
+const map:LevelOfConcious[] = [
   // Восприятие Бога Восприятие жизни Уровень Оценка Эмоция Процесс
   { whoIsGod: "Я", lifeIs: "Она просто существует", level: "Просветление", mark: 700, emotion: "Невозможно выразить словами", process: "Чистое сознание" },
   { whoIsGod: "Всё сущее", lifeIs: "Совершенная", level: "Гармония", mark: 600, emotion: "Счастье", process: "Вдохновение" },
@@ -162,9 +170,9 @@ const questions = [
 ];
 let res = 20;
 
-export default withAmp(() => {
+export default () => {
   const [result, setResult] = useState(res)
-  const [level, setLevel] = useState({});
+  const [level, setLevel] = useState<LevelOfConcious>(map[0]);
   let candidate = map[0];
 debugger;
   for (let m of map ){
@@ -204,4 +212,4 @@ debugger;
         </>)
       )}
   </>)
-})
+}
